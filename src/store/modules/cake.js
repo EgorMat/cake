@@ -24,17 +24,17 @@ const mutations = {
     })
   },
 
-  setTopCoord(state, height){
-    if (state.layers.length == 1){
-      state.topСoord = -50;
-    }
-    else if (state.layers.length == 2) {
-      state.topСoord =-50 + state.layers[0].height/2 + height/2
-    }
-    else if (state.layers.length == 3) {
-      state.topСoord =-50 + state.layers[0].height/2 + state.layers[1].height  + height/2
-    }
-  }
+  // setTopCoord(state, height){
+  //   if (state.layers.length == 1){
+  //     state.topСoord = 0;
+  //   }
+  //   else if (state.layers.length == 2) {
+  //     state.topСoord = state.layers[0].height/2 + height/2
+  //   }
+  //   else if (state.layers.length == 3) {
+  //     state.topСoord = state.layers[0].height/2 + state.layers[1].height  + height/2
+  //   }
+  // }
 
 }
 
