@@ -2,19 +2,26 @@
   <div class = "builder">
     <form>
     <label>Выберите ширину слоя:
-     <select v-model="size.width">
-      <option value=40>Большой</option>
-      <option value=30>Средний</option>
-      <option value=20>Маленький</option>
+     <select v-model="layer.width">
+      <option value=0.4>Большой</option>
+      <option value=0.3>Средний</option>
+      <option value=0.2>Маленький</option>
     </select>
   </label>
 <label>Выберите высоту слоя:
-    <select v-model="size.height">
-      <option value=50>Большой</option>
-      <option value=30>Средний</option>
-      <option value=20>Маленький</option>
+    <select v-model="layer.height">
+      <option value=0.5>Большой</option>
+      <option value=0.3>Средний</option>
+      <option value=0.2>Маленький</option>
     </select>
 </label>
+ <label>Выберите цвет:
+     <select v-model="layer.color">
+       <option value='red'>Красный</option>
+       <option value='yellow'>Желтый</option>
+       <option value='blue'>Синий</option>
+     </select>
+ </label>
     <!-- <img :src="require(`@/assets/big-1.png`)"/> -->
   <button @click="createLayer">Добавить слой</button>
   </form>
@@ -34,9 +41,10 @@ export default {
   },
   data() {
     return {
-      size: {
-        width : 20,
-        height : 20,
+      layer: {
+        width : 0.2,
+        height : 0.2,
+        color: 'red'
       },
       x: 0,
     }
@@ -49,9 +57,7 @@ computed: mapGetters({
   methods: {
     createLayer(e){
       e.preventDefault();
-      this.$store.dispatch('addLayer', this.size).then(() =>{
-        this.$store.dispatch('setTopCoord', +this.size.height)
-      })
+      this.$store.dispatch('addLayer', this.layer)
     }
   }
 
