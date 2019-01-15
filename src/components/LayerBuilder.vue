@@ -17,7 +17,7 @@
     props: ['numberOfLayer'],
     data(){
         return {
-          opened: false
+          opened: true
       }
   },
   methods: {

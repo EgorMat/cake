@@ -1,11 +1,8 @@
 <template>
   <div class="cake" id='container'>
-    <button @click="createLayer('green', 0.8, 0.3)">Создать зеленый слой</button>
-      <button  class="a" @click="createLayer('red', 1, 0.5)">Создать  красный слой</button>
-        <button class="b"  @click="createLayer('yellow', 0.3, 0.2)">Создать  желтый слой</button>
-  <div class="coord">  {{mouse.x}}
+  <!-- <div class="coord">  {{mouse.x}}
     {{mouse.y}}
-  </div>
+  </div> -->
         <!-- <CakeLayer v-for="(layer, index) in layers"  :key = "index" :layer="layer" class="cakeLayer"/> -->
   </div>
 </template>
@@ -28,8 +25,6 @@ export default {
       geometries:[],
       meshes:[],
       materials:[],
-      mesh1: null,
-      mesh2: null,
       mouse: {
         x: null,
         y: null
@@ -40,12 +35,13 @@ export default {
       material: null,
       y: 0,
       controls: null,
-      // mesh1: null,
     }
   },
   computed: mapGetters({
-    layers : 'getLayers'
+    layers : 'getLayers',
+    numberOfLayers: 'getNumberOfLayers'
   }),
+
   methods: {
     init(){
       let container = document.getElementById('container');
@@ -58,31 +54,24 @@ export default {
       this.camera.position.y  = 0.5;
       this.scene = new THREE.Scene();
 
-
-
-
-      // this.material1 = new Three.MeshBasicMaterial({side: Three.DoubleSide, color: color1});
-      // this.mesh2 = new Three.Mesh(geometry1, this.material1);
-      // this.mesh1.position.set(0, 0, 0);
-      // this.mesh1.position.set(0, this.yCoord, 0);
-
-      // this.scene.add(this.mesh2);
-      this.renderer = new THREE.WebGLRenderer({antialias: true});
+      var ambientLight = new THREE.AmbientLight(0x0c0c0c,10);
+      this.scene.add(ambientLight);
+      var spotLight = new THREE.SpotLight(0xffffff);
+      spotLight.position.set(4, 1, -1);
+      spotLight.castShadow = true;
+      this.scene.add(spotLight);
+      this.renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
       this.renderer.setSize(container.clientWidth, container.clientHeight);
       container.appendChild(this.renderer.domElement);
-      // console.log(this.mouse)
-
-      // console.log(this.scene.children)
       this.renderer.render(this.scene, this.camera);
     },
     createLayer(layer){
-      console.log(1)
+      console.log('1')
       this.y += this.height/2 + layer.height/2;
       this.geometries.push(new THREE.CylinderGeometry(layer.width, layer.width, layer.height, 20));
-      this.materials.push(new THREE.MeshBasicMaterial({side: THREE.DoubleSide, color: layer.color}));
+      this.materials.push(new THREE.MeshLambertMaterial({side: THREE.DoubleSide, color: layer.color}));
       let mesh  = new THREE.Mesh(this.geometries[this.geometries.length-1], this.materials[this.materials.length-1]);
       mesh.name = this.meshes.length;
-
       this.meshes.push(mesh);
       this.meshes[this.meshes.length-1].position.set(0, this.y, 0);
       this.scene.add(this.meshes[this.meshes.length-1]);
@@ -111,10 +100,12 @@ export default {
     },
     mounted(){
     this.init()
-      window.addEventListener( 'click', this.onMouseClick, false );
+      this.$store.dispatch('addLayer', {color: 'red', height: 0.3, width: 0.3})
+      window.addEventListener('mousedown', this.onMouseClick, false );
     },
+
     watch: {
-      layers(){
+      numberOfLayers(){
         this.createLayer(this.$store.getters.getLastLayer)
       }
     }

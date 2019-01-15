@@ -37,7 +37,7 @@ export default {
     }
   },
   computed: {
-    // строим position следующего слоя относительно этого параметра
+    
   },
   methods:{
     init(){
